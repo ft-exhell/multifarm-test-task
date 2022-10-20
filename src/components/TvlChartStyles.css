@@ -1,0 +1,17 @@
+.chart-area h2 {
+    color: #60c6fe;
+}
+
+.chart-area h2 em {
+    color: white;
+}
+
+.chart-area h3 {
+    color: white;
+}
+
+.tvl-chart {
+    background-color: #2d3254;
+    border-radius: 10px;
+    padding: 10px 25px;
+}
