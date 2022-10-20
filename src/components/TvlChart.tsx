@@ -1,25 +1,34 @@
-import { LineChart, Line } from "recharts"
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts"
+import useFetchTvl from "../hooks/useApi"
+import { TvlChartProps, ApiStatus } from "../interfaces";
 
-const data = [
-    { year: '2020', react: 1, angular: 3, vue: 5},
-    { year: '2021', react: 2, angular: 2, vue: 4},
-    { year: '2022', react: 3, angular: 3, vue: 3},
-    { year: '2023', react: 4, angular: 2, vue: 2}
-]
-
-const TvlChart = () => {
+const TvlChart = ({ url }: TvlChartProps) => {
+    const data = useFetchTvl(url)
+    
     return (
-        <LineChart
-            width={400}
-            height={400}
-            data={data}
-        >
-            <Line 
-                type='monotone'
-                dataKey='react'
-                stroke='#8884d8'
-            />
-        </LineChart>
+        <>
+            {data.status === ApiStatus.Loading && <h2>Loading</h2>}
+            {data.status === ApiStatus.Success && (
+                <div>
+                    <h2>{`${data.data.farm}: ${data.data.asset}`}</h2>
+                    <LineChart
+                        width={400}
+                        height={400}
+                        data={data.data.tvlStakedHistory}
+                    >
+                        <Line 
+                            type="monotone" 
+                            dataKey="value" 
+                            stroke="#8884d8" 
+                        />
+                        <CartesianGrid stroke="#ccc" />
+                        <XAxis dataKey='date' />
+                        <YAxis />
+                    </LineChart>
+                </div>
+            )}
+            {data.status === ApiStatus.Error && <h2>{data.error}</h2>}
+        </>
     )
 }
 
